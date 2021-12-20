@@ -1,10 +1,12 @@
 import React, {useState} from 'react'
 import {Button} from 'react-bootstrap'
-import Background from '../assets/bg3.jpg'
+import '../assets/css/Login.css'
 
 function Login() {
     return(
-        <h1>Login</h1>
+        <div className="MainPg">
+
+        </div>
     )
 }
         

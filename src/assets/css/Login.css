@@ -1,0 +1,8 @@
+.MainPg {
+    width : 100vw;
+    height: 100vh;
+    background-image: url(../image/bg3.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}

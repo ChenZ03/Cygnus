@@ -1,6 +1,6 @@
 import {Routes, Route} from 'react-router-dom'
 import Login from './components/Login'
-import './App.css';
+import './assets/css/App.css';
 
 function App() {
   return (
