@@ -1,6 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react'
 import {Button, Form} from 'react-bootstrap'
 import jwt_decode from 'jwt-decode'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import BackdropFilter from "react-backdrop-filter";
 import axios from 'axios'
 import '../assets/css/Login.css'
 
@@ -69,40 +71,79 @@ function Login() {
     }
 
     return(
-        <div className="MainPg">
-            <Form>
-                {
-                    register &&
-                    <Form.Group className="mb-3">
-                        <Form.Label>Username :</Form.Label>
-                        <Form.Control type="text" placeholder="Enter your username" id="username" />
-                    </Form.Group>
-                }
-                <Form.Group className="mb-3">   
-                    <Form.Label>Email :</Form.Label>
-                    <Form.Control type="email" placeholder="Enter your email address" id="email"/>
-                    <Form.Text className="text-muted">
-                        We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
-                <Form.Group className="mb-3">   
-                    <Form.Label>Password :</Form.Label>
-                    <Form.Control type="password" placeholder="Enter your password" id="password"/>
-                </Form.Group>
-                
-                {
-                    register &&
-                    <Form.Group className="mb-3">
-                        <Form.Label>Confirm Password :</Form.Label>
-                        <Form.Control type="password" placeholder="Renter your password" id="password2"/>
-                    </Form.Group>
-                }
-                
-                <Button className="m-2 btn btn-primary" onClick={loginHandler}>{register ? "Login" : "Login Now"}</Button>
-                <Button className="m-2 btn btn-secondary" onClick={registerHandler}>{register ? "Register Now" : "Register"}</Button>
-            </Form>
+        <div className="MainPg tint">
+            <div className="Logo">
+                <h1 className="LgText">CYGNUS</h1>
+            </div>
+            <div className="d-flex justify-content-center">
+                <BackdropFilter
+                    className="formBox"
+                    filter={"blur(30px) sepia(5%) "}
+                    canvasFallback={true}
+                    html2canvasOpts={{
+                        allowTaint: true
+                    }}
+                    onDraw={() => {
+                        console.log("Rendered !");
+                    }}
+                >
+                <Form>
+                    <div className="content">
+                        <h1 className="log mb-5">{register ? "Register" : "Login"}</h1>
+                        {
+                            register &&
+                            <Form.Group className="for">
+                                <div className="formItem">
+                                    <div className="icons d-flex align-items-center justify-content-center  ">
+                                        <i className="fas fa-user"></i>
+                                    </div>
+                                    <input type="text" placeholder="Enter your username" id="username" className="formInt"/>
+                                </div>   
+                            </Form.Group>  
+                        }
+                        <Form.Group className="for">
+                            <div className="formItem">
+                                <div className="icons d-flex align-items-center justify-content-center  ">
+                                    <i className="fas fa-envelope"></i>
+                                </div>
+                                <input type="email" placeholder="Enter your email address" id="email" className="formInt"/>
+                            </div>   
+                        </Form.Group>
+                        <Form.Group className="for">
+                            <div className="formItem">
+                                <div className="icons d-flex align-items-center justify-content-center  ">
+                                    <i className="fas fa-lock"></i>
+                                </div>
+                                <input type="password" placeholder="Enter your password" id="password" className="formInt"/>
+                            </div>   
+                        </Form.Group>
+                        
+                        {
+                            register &&
+                            <Form.Group className="for">
+                                <div className="formItem">
+                                    <div className="icons d-flex align-items-center justify-content-center  ">
+                                        <i className="fas fa-lock"></i>
+                                    </div>
+                                    <input type="password" placeholder="Reenter your password" id="password2" className="formInt"/>
+                                </div>   
+                            </Form.Group>
+                        }
 
-            <div id="buttonDiv" ref={btnDivRef}></div>
+                        <div className="d-flex justify-content-between mx-4">
+                            <button className="m-2" onClick={loginHandler}>{register ? "Sign In" : "Login Now"}</button>
+                            <button className="m-2" onClick={registerHandler}>{register ? "Register Now" : "Register"}</button>
+                        </div>
+                        
+                        <div>
+                            <div id="buttonDiv" className="d-flex justify-content-center p-3 m-3" ref={btnDivRef}></div>
+                        </div>
+                    </div>
+                </Form>
+                </BackdropFilter>
+            </div>
+
+            
 
         </div>
     )
