@@ -1,16 +1,19 @@
 import React, {useState, useRef, useEffect} from 'react'
-import {Button, Form} from 'react-bootstrap'
+import {Form} from 'react-bootstrap'
 import jwt_decode from 'jwt-decode'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import BackdropFilter from "react-backdrop-filter";
-import axios from 'axios'
 import '../assets/css/Login.css'
+import Swal from 'sweetalert2'
+import {useNavigate} from "react-router-dom"
 
 const clientId = '137944324026-ku0kjalf18s7c9r7qfaum4amgcahjlh4.apps.googleusercontent.com'
 
 function Login() {
     const [register, setRegister] = useState(false)
     const btnDivRef = useRef()
+
+    const navigate = useNavigate()
 
     useEffect(() => { 
         const handleGoogleSignIn = async res => {
@@ -50,7 +53,53 @@ function Login() {
         if(!register){
             let email = document.getElementById('email').value
             let password = document.getElementById('password').value
-            window.alert("Login")
+            fetch(`http://${process.env.REACT_APP_API_URL}/auth/user`, {
+                method : 'POST',
+                headers : {'Content-Type': 'application/json'},
+                body : JSON.stringify({email})
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.msg)
+                if(data.msg === "Not Found"){
+                    Swal.fire("User not found, please proceed to register")
+                }else{
+                    let code = Math.floor(100000 + Math.random() * 900000)
+                    fetch(`http://${process.env.REACT_APP_API_URL}/auth/login`, {
+                        method : 'POST',
+                        headers : {'Content-Type': 'application/json'},
+                        body : JSON.stringify({email, password, code})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data)
+                        if(data.msg === "Logged in succesfully"){
+                            Swal.fire({
+                                title : "Two Factor Authentication",
+                                text : "Enter the 6 digits code in your email address",
+                                input : "text",
+                                showCancelButton :true
+                            })
+                            .then(result => {
+                                console.log(result.value, code);
+                                if(parseInt(result.value) === code) {
+                                    Swal.fire("Login Successfully")
+                                    let decoded = jwt_decode(data)
+
+                                    localStorage.setItem('userData', JSON.stringify(decoded))
+                                    localStorage.setItem('token', data)
+                                    navigate("/home")
+
+                                }else{
+                                    Swal.fire("Invalid Code")
+                                }
+                            })
+                        }else{
+                            Swal.fire("Fail to Login")
+                        }
+                    })
+                }
+            })
         }else{
             setRegister(false)
         }
@@ -63,7 +112,36 @@ function Login() {
             let email = document.getElementById('email').value
             let password = document.getElementById('password').value
             let password2 = document.getElementById('password2').value
-            window.alert("Register")
+            fetch(`http://${process.env.REACT_APP_API_URL}/auth/user`, {
+                method : 'POST',
+                headers : {'Content-Type': 'application/json'},
+                body : JSON.stringify({email})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.msg === "Not Found"){
+                    if(password !== password2){
+                        Swal.fire('Password does not match')
+                        return
+                    }
+
+                    fetch(`http://${process.env.REACT_APP_API_URL}/auth/register`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({email, username, password})
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.msg === "Succesfully registered"){
+                            Swal.fire("Successfully Registered, please proceed to login")
+                        }else{
+                            Swal.fire("Error: Failed to register")
+                        }
+                    })
+                }else{
+                    Swal.fire('User Exist, Please proceed to login')
+                }
+            })
         }else{
             setRegister(true)
         }
@@ -73,7 +151,7 @@ function Login() {
     return(
         <div className="MainPg tint">
             <div className="Logo">
-                <h1 className="LgText">CYGNUS</h1>
+                <h1 className="LgText mb-5">CYGNUS</h1>
             </div>
             <div className="d-flex justify-content-center">
                 <BackdropFilter
@@ -87,7 +165,7 @@ function Login() {
                         console.log("Rendered !");
                     }}
                 >
-                <Form>
+                <Form className="d-flex justify-content-center align-items-center">
                     <div className="content">
                         <h1 className="log mb-5">{register ? "Register" : "Login"}</h1>
                         {
@@ -97,7 +175,7 @@ function Login() {
                                     <div className="icons d-flex align-items-center justify-content-center  ">
                                         <i className="fas fa-user"></i>
                                     </div>
-                                    <input type="text" placeholder="Enter your username" id="username" className="formInt"/>
+                                    <input type="text" placeholder="Enter your username" id="username" className="formInt" autoComplete="off"/>
                                 </div>   
                             </Form.Group>  
                         }
@@ -106,7 +184,7 @@ function Login() {
                                 <div className="icons d-flex align-items-center justify-content-center  ">
                                     <i className="fas fa-envelope"></i>
                                 </div>
-                                <input type="email" placeholder="Enter your email address" id="email" className="formInt"/>
+                                <input type="email" placeholder="Enter your email address" id="email" className="formInt" autoComplete="off"/>
                             </div>   
                         </Form.Group>
                         <Form.Group className="for">
@@ -114,7 +192,7 @@ function Login() {
                                 <div className="icons d-flex align-items-center justify-content-center  ">
                                     <i className="fas fa-lock"></i>
                                 </div>
-                                <input type="password" placeholder="Enter your password" id="password" className="formInt"/>
+                                <input type="password" placeholder="Enter your password" id="password" className="formInt" autoComplete="off"/>
                             </div>   
                         </Form.Group>
                         
@@ -125,7 +203,7 @@ function Login() {
                                     <div className="icons d-flex align-items-center justify-content-center  ">
                                         <i className="fas fa-lock"></i>
                                     </div>
-                                    <input type="password" placeholder="Reenter your password" id="password2" className="formInt"/>
+                                    <input type="password" placeholder="Reenter your password" id="password2" className="formInt" autoComplete="off"/>
                                 </div>   
                             </Form.Group>
                         }
@@ -135,9 +213,9 @@ function Login() {
                             <button className="m-2" onClick={registerHandler}>{register ? "Register Now" : "Register"}</button>
                         </div>
                         
-                        <div>
+                        {/* <div>
                             <div id="buttonDiv" className="d-flex justify-content-center p-3 m-3" ref={btnDivRef}></div>
-                        </div>
+                        </div> */}
                     </div>
                 </Form>
                 </BackdropFilter>
