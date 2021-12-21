@@ -4,13 +4,61 @@ html{
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    display: none;
+  }
+
 .Home{
     background-color :#1F242D;
-    width : 100vw;
-    height : 100vh;
-    overflow : hidden;
+    min-width : 100vw;
+    overflow-x : hidden;
+    overflow-y : auto;
+    min-height : 100vh;
     font-family : 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color : white ;
 }
 
+.homeContent{
+    height : 100%;
+    width : 100%;
+}
 
+.col-lg-6{
+    padding: 60px;
+    padding-bottom: 0 !important;
+}
+
+.featured{
+    height : 700px;
+    border : 2px solid #323549;
+    border-radius : 5%;
+}
+
+.blank{
+    height : 30px;
+}
+
+.news{
+    display: block;
+    height : 330px;
+    border : 2px solid #323549;
+    border-radius: 50px;
+}
+
+.watchList{
+    display : block;
+    height : 330px;
+    border : 2px solid #323549;
+    border-radius: 50px;
+}
+
+.no-padding{
+    padding-top: 60px;
+    padding-left : 0;
+}
+
+.title{
+    padding: 40px;
+    font-size: 30px;
+    font-weight: bold;
+}

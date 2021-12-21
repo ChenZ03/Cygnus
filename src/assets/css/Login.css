@@ -39,6 +39,34 @@
     border-radius: 30px;
 }
 
+@media (max-width : 1237px){
+    .formBox{
+        width : 800px;
+    }
+}
+
+@media (max-width : 850px){
+    .formBox{
+        width : 500px;
+    }
+
+    button{
+        padding-left : 20px;
+        padding-right : 20px;
+        padding-top : 10px;
+        padding-bottom : 10px;
+        font-size: 15px;
+        width : 180px;
+    }
+}
+
+@media (max-width: 567px) {
+    .formBox{
+        width : 90%;
+    }
+
+}
+
 
 
 .content{

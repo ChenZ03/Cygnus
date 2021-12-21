@@ -24,3 +24,31 @@
     border-radius: 50px;
     background-color: #323549;
 }
+
+@media (max-width: 1237px) {
+    .User{
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .Logo img{
+        width : 80px;
+    }
+
+    .Logo h1{
+        font-size : 40px;
+    }
+
+    .User{
+        padding-left: 30px;
+        padding-right: 30px;
+        padding-top: 15px;
+        padding-bottom: 15px;
+        font-size : 30px ;
+    }
+
+    .User h1{
+        font-size : 30px;
+    }
+}

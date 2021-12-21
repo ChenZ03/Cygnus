@@ -11,7 +11,25 @@ function Home() {
                 <div className="Home">
                     {<Header />}
                     {<Nav />}
-
+                    <div className="homeContent">
+                        <div className="row">
+                            <div className="col-lg-6">
+                                <div className="featured">
+                                    <h1 className="title">Featured</h1>
+                                </div>
+                            </div>
+                           
+                            <div className="col-lg-6 no-padding">
+                                <div className="watchList">
+                                    <h1 className="title">WatchList</h1>
+                                </div>
+                                <div className="blank"></div>
+                                <div className="news">
+                                    <h1 className="title">News</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             }
         </div>
