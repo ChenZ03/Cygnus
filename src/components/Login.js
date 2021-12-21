@@ -84,10 +84,10 @@ function Login() {
                                 console.log(result.value, code);
                                 if(parseInt(result.value) === code) {
                                     Swal.fire("Login Successfully")
-                                    let decoded = jwt_decode(data)
+                                    let decoded = jwt_decode(data.token)
 
                                     localStorage.setItem('userData', JSON.stringify(decoded))
-                                    localStorage.setItem('token', data)
+                                    localStorage.setItem('token', data.token)
                                     navigate("/home")
 
                                 }else{

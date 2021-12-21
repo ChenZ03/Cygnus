@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react'
-import '../assets/css/Home.css'
+// import '../assets/css/Home.css'
 import Header from './Header'
 import Nav from './Nav'
 
-function Home() {
+function Watchlist() {
     
     return(
         <div>
@@ -18,4 +18,4 @@ function Home() {
     )
 }
  
-export default Home
+export default Watchlist

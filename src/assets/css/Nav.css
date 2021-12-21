@@ -1,0 +1,37 @@
+.nav{
+    padding-top: 10px;
+    width : 100vw;
+    height: auto;
+    border-bottom: 3px solid #323549;
+}
+
+.active {
+    font-size : 30px;
+    text-decoration: none !important;
+    color : white;
+    font-weight: bold;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top : 10px;
+    background-color: #323549;
+}
+
+.active:hover{
+    color: white
+}
+
+.link{
+    font-size : 30px;
+    text-decoration: none !important;
+    color : white;
+    font-weight: bold;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top : 10px;
+}
+
+.link:hover{
+    background-color : #323549;
+    transition: 400ms ease;
+    color: white;
+}
