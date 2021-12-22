@@ -62,3 +62,17 @@ html{
     font-size: 30px;
     font-weight: bold;
 }
+
+.actions{
+    padding: 40px;
+}
+
+.view{
+    background-color: #53C7A7;
+    color : black;
+}
+
+.newsContent-sm{
+    padding-left: 50px;
+    padding-right: 50px;
+}

@@ -1,0 +1,111 @@
+html{
+    padding : 0;
+    margin : 0;
+    box-sizing: border-box;
+}
+
+::-webkit-scrollbar {
+    display: none;
+  }
+
+.News{
+    background-color :#1F242D;
+    min-width : 100vw;
+    overflow-x : hidden;
+    overflow-y : auto;
+    min-height : 100vh;
+    font-family : 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color : white ;
+}
+
+.curr, .next{
+    padding : 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    font-size : 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-left: 15px;
+    transition : 400ms ease;
+}
+
+.curr {
+    background-color : #323549;
+    border-radius : 20px;
+}
+
+.curr:hover , .next:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.news-row{
+    height : 240px;
+    width : 100%;
+    padding-left :40px;
+    padding-right : 40px;
+    padding-top : 20px;
+    padding-bottom : 20px;
+}
+
+.news-col{
+    padding : 5px;
+    border : 2px solid #323549;
+    border-radius :50px;
+}
+
+.news-content-row{
+    padding: 10px;
+    padding-left : 20px;
+    padding-right : 20px;
+    height: 100%;
+    width : 100%;
+}
+
+.news-img{
+    height : 100%;
+    width : 100%;
+    padding : 20px;
+}
+
+.news-headline{
+    font-weight: bold;
+    font-size : 17px !important;
+}
+
+.news-summary{
+    font-size : 14px !important;
+    font-weight: lighter;
+}
+
+.news-link{
+    text-decoration: underline;
+    color: #ffff;
+}
+
+.news-link:hover{
+    color: white;
+    transform: scale(1.05);
+    transition : 400ms ease
+}
+
+.catLink {
+    font-size: 23px;
+    font-weight: bold;
+    padding: 30px;
+    transition : 400ms ease;
+}
+
+.catLink:hover, .active-link:hover{
+    font-size : 30px;
+    cursor: pointer;
+}
+
+.active-link {
+    font-size: 23px;
+    font-weight: bold;
+    padding: 30px;
+    transition : 400ms ease;
+    background-color : #323549;
+    border-radius: 10px;
+}
