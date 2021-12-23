@@ -40,7 +40,7 @@ html{
 }
 
 .news-row{
-    height : 240px;
+    height : auto;
     width : 100%;
     padding-left :40px;
     padding-right : 40px;
@@ -52,6 +52,8 @@ html{
     padding : 5px;
     border : 2px solid #323549;
     border-radius :50px;
+    margin-bottom : 10px;
+    margin-top : 10px;
 }
 
 .news-content-row{
@@ -64,6 +66,8 @@ html{
 
 .news-img{
     height : 100%;
+    max-height : 200px;
+    overflow : hidden;
     width : 100%;
     padding : 20px;
 }
@@ -108,4 +112,14 @@ html{
     transition : 400ms ease;
     background-color : #323549;
     border-radius: 10px;
+}
+
+@media (max-width: 768px){
+    .news-row{
+        height: auto;
+    }
+
+    .news-col{
+        height: auto;
+    }
 }

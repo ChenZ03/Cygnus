@@ -3,30 +3,42 @@ import '../assets/css/Home.css'
 import Header from './Header'
 import Nav from './Nav'
 import {useNavigate} from 'react-router-dom'
+import Featured from './Featured'
 
 function Home() {
     const [featured, setFeatured] = useState([])
     const [news, setNews] = useState()
+    const [fetching, setFetching] = useState(false)
+    const [userData, setUserData] = useState({})
 
     useEffect(() => {
         fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/general`)
         .then(response => response.json())
-        .then(data => setNews(data.data))
-        
+        .then(data =>{
+            setNews(data.data)
+            setFetching(true)
+        })
+
+        let userId = JSON.parse(localStorage.getItem('userData'))
+
+        fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
+        .then(response => response.json())
+        .then(data => setUserData(data.user))
+
+        setFeatured(['AAPL', 'TSLA', 'AMZN'])
+       
     }, [])
 
     console.log(news)
+    console.log(userData)
     //NEWS
-    let selectedNews = [news[0], news[15], news[50], news[30]];
 
-    let renderNews = selectedNews.map(news => {
-        return(
-            <div className="news-content-sm" key={news.id}>
-                <p><strong>{news.source} - </strong> {news.headline}</p>
-            </div>
-        )
-    })
 
+    if(fetching){
+        var selectedNews = [news[0], news[15], news[50], news[30]];
+        var showFeatured = featured.map(fea => <Featured company={fea} />)
+    }
+    
     let navigate = useNavigate()
     return(
         <div>
@@ -47,6 +59,12 @@ function Home() {
                                             }}>View More</button>
                                         </div>
                                     </div>
+                                    <div className="featured-items">
+                                        {
+                                            fetching &&
+                                            showFeatured
+                                        }
+                                    </div>
                                 </div>
                             </div>
                            
@@ -60,6 +78,17 @@ function Home() {
                                                 navigate("/watchList")
                                             }}>View</button>
                                         </div>
+                                        
+                                    </div>
+                                    <div className="watching">
+                                        {
+                                            fetching && userData.watchList.length > 0 ?
+                                            null
+                                            :
+                                            <div className="d-flex align-items-center justify-content-center">
+                                                <h1>NOTHING IN WATCHLIST</h1>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                                 <div className="blank"></div>
@@ -75,7 +104,14 @@ function Home() {
                                     </div>
                                     <div className="newsContent-sm">
                                         {
-                                           renderNews 
+                                            fetching &&
+                                            selectedNews.map(news => {
+                                                return(
+                                                    <div className="news-content-sm" key={news.id}>
+                                                        <p><strong>{news.source} - </strong> {news.headline}</p>
+                                                    </div>
+                                                )
+                                            })
                                         }
                                     </div>
                                 </div>

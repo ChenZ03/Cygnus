@@ -76,3 +76,8 @@ html{
     padding-left: 50px;
     padding-right: 50px;
 }
+
+.featured-items{
+    padding: 50px;
+    height: auto;
+}

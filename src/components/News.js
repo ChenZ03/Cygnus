@@ -10,7 +10,7 @@ function News() {
     const [curr, setCurr] = useState([0,1,2])
     const [fetching, setFetching] = useState(false)
 
-    let pages = [1,2,3,4,5,6,7,8,9,10]
+    let pages = [1,2,3,4,5,6,7,8,9]
 
     useEffect(() => {
         fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/${category}`)
@@ -62,7 +62,7 @@ function News() {
                                 curr.map(n => {
                                     return (
                                         <div className="row d-flex justify-content-center news-row" key={n}>
-                                            <div className="col-lg-5 col-md-12 news-col">
+                                            <div className="col-xl-5 col-12 news-col">
                                                 <div className="row news-content-row">
                                                     <div className="col-4 news-content-col">
                                                         <img src={news[n].image} alt="news" className="img-fluid news-img"/>
@@ -74,8 +74,8 @@ function News() {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="col-lg-1"></div>
-                                            <div className="col-lg-5 col-md-12 news-col">
+                                            <div className="col-xl-1"></div>
+                                            <div className="col-xl-5 col-12 news-col">
                                                 <div className="row news-content-row">
                                                     <div className="col-4 news-content-col">
                                                         <img src={news[n+3].image} alt="news" className="img-fluid news-img"/>
