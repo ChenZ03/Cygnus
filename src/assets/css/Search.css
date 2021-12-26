@@ -18,3 +18,36 @@ html{
     font-family : 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color : white ;
 }
+
+.stockItem{
+    padding: 50px;
+    border : 2px solid #323549;
+    margin-bottom : 30px;
+    border-radius: 20px;
+    transition: 400ms ease;
+    height : 200px;
+}
+
+.stockList{
+    width : 100%;
+    padding: 50px;
+    padding-top : 10px;
+    padding-bottom: 0;
+    height: auto;
+}
+
+.stockItem:hover{
+    transform: scale(1.05);
+    box-shadow: 3px 3px 3px 3px #323549;
+    cursor : pointer;
+}
+
+@media (max-width:1237px){
+    .stockList{
+        width:100%;
+    }
+}
+
+.search{
+    width: 50%;
+}

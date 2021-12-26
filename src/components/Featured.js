@@ -39,7 +39,7 @@ function Featured({company}) {
                         <div className="col-8">
                             <h2>{comName[1]} - {comName[0]}</h2>
                         </div>
-                        <div className="col-4"  d-flex >
+                        <div className="col-4 d-flex" >
                             <div className="comData">
                                 <div className="d-flex"> 
                                     <h1>{comData.c}</h1>
