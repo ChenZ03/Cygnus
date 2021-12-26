@@ -79,5 +79,34 @@ html{
 
 .featured-items{
     padding: 50px;
+    padding-top : 10px;
+    padding-bottom: 0;
     height: auto;
+}
+
+.featureList{
+    padding: 20px;
+    border : 2px solid #323549;
+    margin-bottom : 30px;
+    border-radius: 20px;
+    transition: 400ms ease;
+}
+
+.featureList:hover{
+    transform: scale(1.05);
+    box-shadow: 3px 3px 3px 3px #323549;
+    cursor : pointer;
+}
+
+.lose, .win{
+    font-size: 20px;
+    text-align: center;
+}
+
+.lose{
+    color : red !important;
+}
+
+.win{
+    color : #81A950
 }

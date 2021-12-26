@@ -25,7 +25,7 @@ function Home() {
         .then(response => response.json())
         .then(data => setUserData(data.user))
 
-        setFeatured(['AAPL', 'TSLA', 'AMZN'])
+        setFeatured(['AAPL', 'TSLA', 'LILM'])
        
     }, [])
 
@@ -36,7 +36,7 @@ function Home() {
 
     if(fetching){
         var selectedNews = [news[0], news[15], news[50], news[30]];
-        var showFeatured = featured.map(fea => <Featured company={fea} />)
+        var showFeatured = featured.map(fea => <Featured company={fea} key={fea}/>)
     }
     
     let navigate = useNavigate()

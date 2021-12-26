@@ -4,6 +4,7 @@ import Home from './components/Home'
 import Watchlist from './components/WatchList'
 import News from './components/News'
 import Forum from './components/Forum'
+import Stock from './components/Stock'
 import './assets/css/App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/watchList" element={<Watchlist />} />
         <Route path="/news" element={<News />} />
         <Route path="/forum" element={<Forum />} />
+        <Route path="/stock" element={<Stock />} />
       </Routes>
     </div>
   );
