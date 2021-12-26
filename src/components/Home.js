@@ -4,6 +4,7 @@ import Header from './Header'
 import Nav from './Nav'
 import {useNavigate} from 'react-router-dom'
 import Featured from './Featured'
+import Swal from 'sweetalert2'
 
 function Home() {
     const [featured, setFeatured] = useState([])
@@ -38,6 +39,16 @@ function Home() {
         var selectedNews = [news[0], news[15], news[50], news[30]];
         var showFeatured = featured.map(fea => <Featured company={fea} key={fea}/>)
     }
+
+    const search = e =>{
+        e.preventDefault();
+        let searchTerm = document.getElementById('search').value
+        if(searchTerm.length < 1) {
+            Swal.fire("Please enter at least one character")
+        }else{
+            navigate('/search',  {state : {term : searchTerm}})
+        }
+    }
     
     let navigate = useNavigate()
     return(
@@ -53,10 +64,10 @@ function Home() {
                                     <div className="d-flex align-items-center justify-content-between">
                                         <h1 className="title">Featured</h1>
                                         <div className="actions">
-                                            <button className="view" onClick={e => {
-                                                e.preventDefault();
-                                                navigate("/featured")
-                                            }}>View More</button>
+                                          <div>
+                                              <input type="text" className="search" placeholder="Search for stocks" id="search"/>
+                                              <button onClick={search}>Search</button>
+                                          </div>
                                         </div>
                                     </div>
                                     <div className="featured-items">

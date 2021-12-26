@@ -5,6 +5,7 @@ import Watchlist from './components/WatchList'
 import News from './components/News'
 import Forum from './components/Forum'
 import Stock from './components/Stock'
+import Search from './components/Search'
 import './assets/css/App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/forum" element={<Forum />} />
         <Route path="/stock" element={<Stock />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </div>
   );
