@@ -14,3 +14,56 @@ html{
     color : white ;
 }
 
+table{
+    padding: 20px;
+    border-collapse : collapse;
+    width : 100%;
+    text-align : center;
+}
+
+.companyLink{
+    text-decoration: none;
+    color : white ;
+}
+
+.companyLink:hover{
+    color : white ;
+}
+
+td, th{
+    font-size: 18px;
+    border : 1px solid white;
+    text-align: left;
+    padding : 10px;
+}
+
+tr:nth-child(even){
+    background-color : rgba(50, 53, 73, 0.5);
+}
+
+.insiders{
+    height : auto;
+    padding: 20px;
+    border : 1px solid #323549;
+    border-radius: 20px;;
+}
+
+.insidersBox{
+    height: 300px;
+    overflow-y : auto;
+}
+
+.insiders-logo{
+    border-bottom: 1.5px solid #323549;
+}
+
+i{
+    font-size:40px;
+    padding : 20px;
+}
+
+.insidersul{
+    width : 40%;
+    text-align : center;
+    list-style-type: none;
+}
