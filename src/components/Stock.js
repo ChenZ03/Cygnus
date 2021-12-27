@@ -3,27 +3,34 @@ import Header from './Header'
 import Nav from './Nav'
 import {useLocation} from 'react-router-dom'
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import { Bar, Line } from 'react-chartjs-2';
+import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title } from 'chart.js';
 import '../assets/css/Stock.css'
+ChartJS.register(LineElement, PointElement, LinearScale, Title);
+
 
 function Stock() {
     const location = useLocation()
     const company = location.state.company
     const [hasData, setHasData] = useState(true)
     const [loading, setLoading] = useState(true)
-    const [chartLoading, setChartLoading] = useState(true)
     const [interval, setInterval] = useState('day')
     const [companyData, setCompanyData] = useState({}) // Finn
     const [companyData2, setCompanyData2] = useState({}) // Alpha
     const [companyNews, setCompanyNews] = useState([]) // Finn
-    const [chart, setChart] = useState([]) // Alpha
     const [trends, setTrends] = useState([]) // Finn
     const [earnings, setEarnings] = useState([]) // Alpha 
-    const [quarterEarnings, setQuarterEarnings] = useState([]) // Alpha
     const [reddit, setReddit] = useState([]) // Finn
     const [twitter, setTwitter] = useState([]) // Finn
     const [insiderTrans, setInsiderTrans] = useState() // Finn
     const [quote, setQuote] = useState({}) // Finn
 
+    //Chart data
+    const [stockChart, setStockChart] = useState({}) // Alpha
+    const [chartLoading, setChartLoading] = useState(true)
+    const [redditChart, setRedditChart] = useState(null)
+    const [twitterChart, setTwitterChart] = useState(null)
+    const [trendsChart, setTrendsChart] = useState({})
 
     useEffect(() => {
         fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
@@ -44,6 +51,7 @@ function Stock() {
                 .then(data => {
                     setReddit(data.data.reddit)
                     setTwitter(data.data.twitter)
+                   
                 })
 
                 await fetch(`http://${process.env.REACT_APP_API_URL}/company/insider/${company}`)
@@ -64,8 +72,10 @@ function Stock() {
                 .then(response => response.json())
                 .then(data => {
                     setEarnings(data.data.annualEarnings)
-                    setQuarterEarnings(data.data.quarterlyEarnings)
                 })
+
+                
+               
 
                setLoading(false)
             }else{
@@ -75,6 +85,33 @@ function Stock() {
 
 
     }, [company])
+
+    useEffect(() => {
+        if(reddit && twitter){
+            let redditLabels = reddit.map(r => r.atTime.split(' ')[0])
+            let redditData = reddit.map(r => r.mention)
+            setRedditChart({
+                labels : redditLabels ,
+                datasets: [{
+                    label: 'mentions',
+                    data: redditData,
+                    borderWidth: 1
+                }]
+            })
+
+            let twitterLabels = twitter.map(r => r.atTime.split(' ')[0])
+            let twitterData = twitter.map(r => r.mention)
+            setTwitterChart({
+                labels : twitterLabels ,
+                datasets: [{
+                    label: 'mentions',
+                    data: twitterData,
+                    borderWidth: 1
+                }]
+            })
+        }
+
+    }, [reddit, twitter])
 
     useEffect(() => {
 
@@ -122,7 +159,7 @@ function Stock() {
         if(insiderTrans.length > 0){
             var showInsiders = insiderTrans.map(trans => {
                 return(
-                    <div className="insiderElement d-flex justify-content-between px-4 py-2" key={trans.name}>
+                    <div className="insiderElement d-flex justify-content-between px-4 py-2" key={Math.random().toString(16).slice(2)}>
                         <h3>{trans.name}</h3>
                         <ul className="insidersul">
                             <li><h4>Share : {trans.share}</h4></li>
@@ -134,7 +171,18 @@ function Stock() {
             })
         }
 
-        
+        if(earnings.length > 0) {
+            var showEarnings = earnings.map(ear => {
+                return(
+                    <div className="insiderElement d-flex justify-content-between px-4 py-2" key={Math.random().toString(16).slice(2)}>
+                        <h3>{ear.fiscalDateEnding}</h3>
+                        <h3 className={ear.reportedEPS< 0 ? "lose" : "win"}>{ear.reportedEPS}</h3>
+                    </div>
+                )
+            })
+        }
+
+
     }
 
 
@@ -220,7 +268,7 @@ function Stock() {
                         {
                             !chartLoading &&
                             <div className="chart py-5">
-
+                                
                             </div>
                         }
                         <div className="trends py-5">
@@ -242,14 +290,55 @@ function Stock() {
                                 }
                             </div>
                         </div>
-                        <div className="earnings py-5">
-
-                        </div>
-                        <div className="quarterEarnings py-5">
-
+                        <div className="earnings py-5 mt-5 mb-5">
+                            <div className="row earnings-logo">
+                                <div className="col-12 d-flex align-items-center justify-content-left">
+                                    <i className="fas fa-coins"></i>
+                                    <h1>EARNINGS</h1>
+                                </div>
+                            </div>
+                            <div className="earningsBox py-5">
+                                {
+                                    earnings.length > 0 ?
+                                    showEarnings
+                                    :
+                                    <h1>NO EARNING DATA</h1>
+                                }
+                            </div>
+                            
                         </div>
                         <div className="social py-5">
+                            {
+                                redditChart &&
+                                <div className="reddit py-5 mb-5">
+                                    <div className="row earnings-logo">
+                                        <div className="col-12 d-flex align-items-center justify-content-left">
+                                            <i className="fab fa-reddit"></i>
+                                            <h1>Reddit Mentions</h1>
+                                        </div>
+                                    </div>
+                                    <Bar 
+                                    data = {redditChart}
+                                    />
+                                </div>
+                            }
 
+                            {
+                                twitterChart &&
+                                <div className="reddit py-5 mb-5">
+                                    <div className="row earnings-logo">
+                                        <div className="col-12 d-flex align-items-center justify-content-left">
+                                            <i className="fab fa-twitter"></i>
+                                            <h1>Twitter Mentions</h1>
+                                        </div>
+                                    </div>
+                                    <Bar 
+                                    data ={twitterChart}
+                                    />
+                                </div>
+                            }
+
+                            
                         </div>
                         {
                             companyNews.length > 3 &&
@@ -259,6 +348,13 @@ function Stock() {
                             </div>
                         }
                     </div>
+                }
+
+                {
+                    !hasData &&
+                    
+                    <h1 className="text-center py-5">NO DATA AVAILABLE FOR THIS STOCK</h1>
+ 
                 }
             </div>  
         }

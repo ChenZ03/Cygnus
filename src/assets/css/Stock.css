@@ -41,19 +41,19 @@ tr:nth-child(even){
     background-color : rgba(50, 53, 73, 0.5);
 }
 
-.insiders{
+.insiders, .earnings{
     height : auto;
     padding: 20px;
     border : 1px solid #323549;
     border-radius: 20px;;
 }
 
-.insidersBox{
+.insidersBox, .earningsBox{
     height: 300px;
     overflow-y : auto;
 }
 
-.insiders-logo{
+.insiders-logo, .earnings-logo{
     border-bottom: 1.5px solid #323549;
 }
 
