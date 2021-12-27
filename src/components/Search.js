@@ -24,9 +24,9 @@ function Search() {
                 let comData = []
                 let comData2 = []
                 let length = data.data.result.length
-                for(let i = 0; i < length / 2; i++){
+                for(let i = 0; i < length / 4; i++){
                     comData.push(data.data.result[i])
-                    comData2.push(data.data.result[(Math.floor(length / 2)+ i)])
+                    comData2.push(data.data.result[(Math.floor(length / 4)+ i)])
                 }
                 setCompanyList2(comData2)
                 setCompanyList(comData)

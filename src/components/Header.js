@@ -4,7 +4,6 @@ import L1 from '../assets/image/L1.png'
 
 function Header() {
     const user = JSON.parse(localStorage.getItem('userData')).user
-    console.log(user)
     return (
         <div className="d-flex align-items-center justify-content-between">
             <div className="Logo d-flex align-items-center">

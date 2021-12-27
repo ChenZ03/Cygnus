@@ -30,8 +30,6 @@ function Home() {
        
     }, [])
 
-    console.log(news)
-    console.log(userData)
     //NEWS
 
 
