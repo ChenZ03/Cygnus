@@ -26,11 +26,11 @@ function Stock() {
     const [quote, setQuote] = useState({}) // Finn
 
     //Chart data
-    const [stockChart, setStockChart] = useState({}) // Alpha
+    const [stockChart, setStockChart] = useState(null) // Alpha
     const [chartLoading, setChartLoading] = useState(true)
     const [redditChart, setRedditChart] = useState(null)
     const [twitterChart, setTwitterChart] = useState(null)
-    const [trendsChart, setTrendsChart] = useState({})
+    const [trendsChart, setTrendsChart] = useState(null)
 
     useEffect(() => {
         fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
@@ -44,7 +44,16 @@ function Stock() {
 
                 await fetch(`http://${process.env.REACT_APP_API_URL}/company/trends/${company}`)
                 .then(response => response.json())
-                .then(data => setTrends(data.data))
+                .then(data => {
+                    let arr = []
+                    data.data.map(e => {
+                        let date = new Date(e.period).getYear()
+                        if(date === 121){
+                            arr.push(e)
+                        }
+                    })
+                    setTrends(arr)
+                })
 
                 await fetch(`http://${process.env.REACT_APP_API_URL}/company/social/${company}`)
                 .then(response => response.json())
@@ -73,8 +82,6 @@ function Stock() {
                 .then(data => {
                     setEarnings(data.data.annualEarnings)
                 })
-
-                
                
 
                setLoading(false)
@@ -114,7 +121,74 @@ function Stock() {
     }, [reddit, twitter])
 
     useEffect(() => {
+        if(trends){
+            let trendsLabel = []
+            let trendsBuy = []
+            let trendsHold = []
+            let trendsSell = []
+            let trendStrongBuy = []
+            let trendStrongSell = []
 
+            trends.map(t => {
+                trendsLabel.push(t.period)
+                trendsBuy.push(t.buy)
+                trendsHold.push(t.hold)
+                trendsSell.push(t.sell)
+                trendStrongBuy.push(t.strongBuy)
+                trendStrongSell.push(t.strongSell)
+            })
+
+            const arbitraryStackKey = "stack1";
+
+            setTrendsChart({
+                labels : trendsLabel,
+                datasets : [
+                    {
+                        stack: arbitraryStackKey,
+                        label : "Hold",
+                        data : trendsHold,
+                        backgroundColor :"rgb(189,183,107)",
+                        borderWidth : 1
+                    },
+                    {
+                        stack: arbitraryStackKey,
+                       label : "Buy",
+                       data : trendsBuy,
+                       backgroundColor : "rgb(60,179,113)",
+                       borderWidth : 1
+                    },
+                    {
+                        stack: arbitraryStackKey,
+                        label : "StrongBuy",
+                        data : trendStrongBuy,
+                        backgroundColor : 'rgb(0,128,0)',
+                        borderWidth : 1
+                     },
+                   
+                    {
+                        stack: arbitraryStackKey,
+                        label : "Sell",
+                        data : trendsSell,
+                        backgroundColor : 'rgb(220,20,60)',
+                        borderWidth : 1
+                     },
+                    
+                     {
+                        stack: arbitraryStackKey,
+                        label : "StrongSell",
+                        data : trendStrongSell,
+                        backgroundColor : 'rgb(255,0,0)',
+                        borderWidth : 1
+                     },
+                ]
+            })
+
+           
+        }
+    }, [trends])
+
+    useEffect(() => {
+        
     }, [interval])
 
     if(!loading) {
@@ -272,7 +346,20 @@ function Stock() {
                             </div>
                         }
                         <div className="trends py-5">
-
+                            {
+                                trendsChart &&
+                                <div className="trends py-5 mb-5">
+                                    <div className="row earnings-logo">
+                                        <div className="col-12 d-flex align-items-center justify-content-left">
+                                            <i className="fas fa-poll"></i>
+                                            <h1>Recommended Trends</h1>
+                                        </div>
+                                    </div>
+                                    <Bar 
+                                    data = {trendsChart}
+                                    />
+                                </div>
+                            }
                         </div>
                         <div className="insiders py-5">
                             <div className="row insiders-logo">
