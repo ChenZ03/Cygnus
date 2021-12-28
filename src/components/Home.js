@@ -11,6 +11,7 @@ function Home() {
     const [news, setNews] = useState()
     const [fetching, setFetching] = useState(false)
     const [userData, setUserData] = useState({})
+    const [editFeatured, setEditFeatured] = useState(false)
 
     useEffect(() => {
         fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/general`)
@@ -26,16 +27,43 @@ function Home() {
         .then(response => response.json())
         .then(data => setUserData(data.user))
 
-        setFeatured(['AAPL', 'TSLA', 'LILM'])
+
+        fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`)
+        .then(response => response.json())
+        .then(data => {
+           let feature = []
+           for(let i of data.feature){
+               feature.push(i)
+           }
+           setFeatured(feature)
+          
+        })
        
     }, [])
+
+    const refreshFeature = () => {
+        setEditFeatured(false)
+
+        fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`)
+        .then(response => response.json())
+        .then(data => {
+           let feature = []
+           for(let i of data.feature){
+               feature.push(i)
+           }
+           setFeatured(feature)
+          
+        })
+    }
 
     //NEWS
 
 
     if(fetching){
         var selectedNews = [news[0], news[15], news[50], news[30]];
-        var showFeatured = featured.map(fea => <Featured company={fea} key={fea}/>)
+        var showFeatured = featured.map(fea => {
+            return <Featured company={fea} key={fea.code} editing={editFeatured} setE={refreshFeature}/>
+        })
     }
 
     const search = e =>{
@@ -61,8 +89,17 @@ function Home() {
                                 <div className="featured">
                                     <div className="d-flex align-items-center justify-content-between">
                                         <h1 className="title">Featured</h1>
+                                        {
+                                                  userData.isAdmin &&
+                                                  <button onClick={e => {
+                                                        e.preventDefault();
+                                                        setEditFeatured(!editFeatured)
+                                                  }}>{editFeatured ? "Cancel" : "Edit"}</button>
+                                              }
                                         <div className="actions">
+                                          
                                           <div>
+                                             
                                               <input type="text" className="search" placeholder="Search for stocks" id="search"/>
                                               <button onClick={search}>Search</button>
                                           </div>

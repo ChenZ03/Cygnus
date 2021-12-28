@@ -211,21 +211,18 @@ function Stock() {
                 let inner = Object.keys(stockChartData[keys])
                 data.push(stockChartData[keys][inner[3]])
             }
-            let half = Math.ceil(labels.length / 4)
-            
-            labels = labels.splice(0, half).reverse()
-            data = data.splice(0, half).reverse()
-            if(labels.length > 20 && data.length > 20){
-                labels.splice(0,20)
-                data.splice(0,20)
+           
+            if(labels.length > 20  && data.length > 20){
+                labels = labels.splice(0,20)
+                data = data.splice(0,20)
             }
 
             setStockChart({
-                labels : labels,
+                labels : labels.reverse(),
                 datasets : [
                     {
                         label : 'Close',
-                        data : data,
+                        data : data.reverse(),
                         fill : false,
                         backgroundColor : 'rgba(231,134,125,1)',
                         borderColor : "rgb(231,134,125,0.8)",
