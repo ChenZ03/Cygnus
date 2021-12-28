@@ -18,7 +18,36 @@ function Login() {
     useEffect(() => { 
         const handleGoogleSignIn = async res => {
             let decoded = jwt_decode(res.credential)  
-            console.log(decoded.email)
+            console.log(decoded)
+            fetch(`http://${process.env.REACT_APP_API_URL}/auth/user`, {
+                method : 'POST',
+                headers : {'Content-Type': 'application/json'},
+                body : JSON.stringify({email : decoded.email})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if(data.msg === "Not Found"){
+                    Swal.fire({
+                        icon : 'error',
+                        title : "User not found",
+                        text : "Please proceed to register"
+                    })
+                }else{
+                    fetch(`http://${process.env.REACT_APP_API_URL}/auth/googleUser/${decoded.email}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        Swal.fire({
+                            icon : "success",
+                            title : "Login Successfully"
+                        })
+                        let decoded = jwt_decode(data.token)
+    
+                        localStorage.setItem('userData', JSON.stringify(decoded))
+                        localStorage.setItem('token', data.token)
+                        navigate("/home")
+                    })
+                }
+            })
         }
     
         const initializeGsi = _ => {
@@ -228,9 +257,9 @@ function Login() {
                             <button className="m-2" onClick={registerHandler}>{register ? "Register Now" : "Register"}</button>
                         </div>
                         
-                        {/* <div>
+                        <div>
                             <div id="buttonDiv" className="d-flex justify-content-center p-3 m-3" ref={btnDivRef}></div>
-                        </div> */}
+                        </div>
                     </div>
                 </Form>
                 </BackdropFilter>
