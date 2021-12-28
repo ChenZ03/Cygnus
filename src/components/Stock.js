@@ -4,6 +4,7 @@ import Nav from './Nav'
 import {useLocation} from 'react-router-dom'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Bar, Line } from 'react-chartjs-2';
+import Swal from 'sweetalert2'
 import 'chart.js'
 import '../assets/css/Stock.css'
 
@@ -32,11 +33,16 @@ function Stock() {
     const [twitterChart, setTwitterChart] = useState(null)
     const [trendsChart, setTrendsChart] = useState(null)
 
+
+    const [exist, setExist] = useState(false)
+
+
     useEffect(() => {
+
         fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
         .then(response => response.json())
         .then(async (data) => {
-            if(data.data.hasOwnProperty('name')){
+            if(data && data.data.hasOwnProperty('name')){
                 setCompanyData(data.data)
                 await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyNews/${company}`)
                 .then(response => response.json())
@@ -83,7 +89,19 @@ function Stock() {
                 .then(data => {
                     setEarnings(data.data.annualEarnings)
                 })
-               
+
+                let userId = JSON.parse(localStorage.getItem('userData'))
+                userId = userId.user.id
+
+                await fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if(data.includes(company)){
+                        console.log(true)
+                        setExist(true)
+                    }
+                })
+
 
                setLoading(false)
             }else{
@@ -324,6 +342,54 @@ function Stock() {
 
     }
 
+    const addtoWatchList = e => {
+        let userId = JSON.parse(localStorage.getItem('userData'))
+        userId = userId.user.id
+        e.preventDefault()
+        fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            if(data.length > 4){
+                Swal.fire("Exceed watchList limit")
+            }else{
+                fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList`, {
+                    method : 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body : JSON.stringify({id : userId, stock : company})
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.msg === 'success'){
+                        Swal.fire("SuccessFully Added to watchList")
+                        setExist(true)
+                    }else{
+                        Swal.fire("Error")
+                    }
+                })
+            }
+        })
+    }
+
+    const removeWatchList = e => {
+        let userId = JSON.parse(localStorage.getItem('userData'))
+        userId = userId.user.id
+        e.preventDefault()
+        fetch(`http://${process.env.REACT_APP_API_URL}/data/delWatchList`, {
+            method : "POST",
+            headers : {'Content-Type': 'application/json'},
+            body : JSON.stringify({id : userId, stock : company})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.msg === 'Success'){
+                Swal.fire('Successfully remove from watchList')
+                setExist(false)
+            }else{
+                Swal.fire('Error')
+            }
+        })
+    }
+
 
     return(
         <>
@@ -337,7 +403,7 @@ function Stock() {
                     <div className="container">
                         <div className="d-flex justify-content-between align-items-center py-5">
                             <a className="companyLink" rel="noreferrer" target="_blank" href={companyData.weburl}><h1>{companyData.name} - {companyData.ticker}</h1></a>
-                            <button className="view">Add to watchList</button>
+                            <button className="view" onClick={exist ? removeWatchList : addtoWatchList} >{exist ? "Remove from Watchlist" : "Add to WatchList"}</button>
                         </div>
                         <div className="description d-flex">
                             <div className="row py-3">
