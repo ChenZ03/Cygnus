@@ -4,9 +4,8 @@ import Nav from './Nav'
 import {useLocation} from 'react-router-dom'
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { Bar, Line } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, PointElement, LinearScale, Title } from 'chart.js';
+import 'chart.js'
 import '../assets/css/Stock.css'
-ChartJS.register(LineElement, PointElement, LinearScale, Title);
 
 
 function Stock() {
@@ -14,12 +13,12 @@ function Stock() {
     const company = location.state.company
     const [hasData, setHasData] = useState(true)
     const [loading, setLoading] = useState(true)
-    const [interval, setInterval] = useState('day')
+    const [interval, setInterval] = useState('Daily')
     const [companyData, setCompanyData] = useState({}) // Finn
     const [companyData2, setCompanyData2] = useState({}) // Alpha
     const [companyNews, setCompanyNews] = useState([]) // Finn
     const [trends, setTrends] = useState([]) // Finn
-    const [earnings, setEarnings] = useState([]) // Alpha 
+    const [earnings, setEarnings] = useState(null) // Alpha 
     const [reddit, setReddit] = useState([]) // Finn
     const [twitter, setTwitter] = useState([]) // Finn
     const [insiderTrans, setInsiderTrans] = useState() // Finn
@@ -27,6 +26,7 @@ function Stock() {
 
     //Chart data
     const [stockChart, setStockChart] = useState(null) // Alpha
+    const [stockChartData, setStockChartData] = useState(null)
     const [chartLoading, setChartLoading] = useState(true)
     const [redditChart, setRedditChart] = useState(null)
     const [twitterChart, setTwitterChart] = useState(null)
@@ -51,6 +51,7 @@ function Stock() {
                         if(date === 121){
                             arr.push(e)
                         }
+                        return e
                     })
                     setTrends(arr)
                 })
@@ -102,7 +103,9 @@ function Stock() {
                 datasets: [{
                     label: 'mentions',
                     data: redditData,
-                    borderWidth: 1
+                    borderWidth: 2,
+                    backgroundColor : "rgba(244,0,7,0.2)",
+                    borderColor : "rgba(244,0,7,0.5)"
                 }]
             })
 
@@ -113,7 +116,9 @@ function Stock() {
                 datasets: [{
                     label: 'mentions',
                     data: twitterData,
-                    borderWidth: 1
+                    borderWidth: 2,
+                    backgroundColor: "rgba(54,162,235,0.3)",
+                    borderColor: "rgb(54,162,235)"
                 }]
             })
         }
@@ -136,6 +141,7 @@ function Stock() {
                 trendsSell.push(t.sell)
                 trendStrongBuy.push(t.strongBuy)
                 trendStrongSell.push(t.strongSell)
+                return t
             })
 
             const arbitraryStackKey = "stack1";
@@ -188,8 +194,51 @@ function Stock() {
     }, [trends])
 
     useEffect(() => {
-        
-    }, [interval])
+        fetch(`http://${process.env.REACT_APP_API_URL}/chart/${interval}/${company}`)
+        .then(response => response.json())
+        .then(data => {
+           let keys = Object.keys(data.data)
+           setStockChartData(data.data[keys[1]])
+        })
+    }, [interval, company])
+
+    useEffect(() => {
+        let labels = []
+        let data = []
+        if(stockChartData){
+            for(let keys in stockChartData){
+                labels.push(keys)
+                let inner = Object.keys(stockChartData[keys])
+                data.push(stockChartData[keys][inner[3]])
+            }
+            let half = Math.ceil(labels.length / 4)
+            
+            labels = labels.splice(0, half).reverse()
+            data = data.splice(0, half).reverse()
+            if(labels.length > 20 && data.length > 20){
+                labels.splice(0,20)
+                data.splice(0,20)
+            }
+
+            setStockChart({
+                labels : labels,
+                datasets : [
+                    {
+                        label : 'Close',
+                        data : data,
+                        fill : false,
+                        backgroundColor : 'rgba(231,134,125,1)',
+                        borderColor : "rgb(231,134,125,0.8)",
+                        color : "rgba(255,255,255,0.8)"
+                    }
+                ]
+            })
+
+            setChartLoading(false)
+
+
+        }
+    }, [stockChartData])
 
     if(!loading) {
 
@@ -244,17 +293,36 @@ function Stock() {
                 )
             })
         }
-
-        if(earnings.length > 0) {
-            var showEarnings = earnings.map(ear => {
-                return(
-                    <div className="insiderElement d-flex justify-content-between px-4 py-2" key={Math.random().toString(16).slice(2)}>
-                        <h3>{ear.fiscalDateEnding}</h3>
-                        <h3 className={ear.reportedEPS< 0 ? "lose" : "win"}>{ear.reportedEPS}</h3>
-                    </div>
-                )
-            })
+        if(earnings){
+            if(earnings.length > 0) {
+                var showEarnings = earnings.map(ear => {
+                    return(
+                        <div className="insiderElement d-flex justify-content-between px-4 py-2" key={Math.random().toString(16).slice(2)}>
+                            <h3>{ear.fiscalDateEnding}</h3>
+                            <h3 className={ear.reportedEPS< 0 ? "lose" : "win"}>{ear.reportedEPS}</h3>
+                        </div>
+                    )
+                })
+            }
+    
         }
+       
+        let time = ['Hour', 'Daily', 'Weekly', 'Monthly']
+
+        var showTime = time.map(t => {
+            var hour = t
+            var int = t
+            if(t === 'Hour'){
+                hour = "oneHour"
+                int = "oneHour"
+            }
+            return (
+                <p className={interval === hour ? "curr" : "next"} key={t} onClick={e => {
+                    e.preventDefault();
+                    setInterval(int)
+                }}>{t}</p>
+            )
+        })
 
 
     }
@@ -340,9 +408,29 @@ function Stock() {
                         <br />
                         <h1 className="text-center"> Analytics : </h1>
                         {
-                            !chartLoading &&
+                            (!chartLoading && stockChart) &&
                             <div className="chart py-5">
-                                
+                                <div className="d-flex justify-content-center align-items-center">
+                                    {showTime}
+                                </div>
+                                <Line data = {stockChart} 
+                                options ={{
+                                    scales: {
+                                        xAxes: [{
+                                            ticks: {
+                                                autoSkip: false,
+                                                maxRotation: 90,
+                                                minRotation: 90,
+                                            }
+                                        }]
+                                    },
+                                    elements: {
+                                        line: {
+                                                fill: false
+                                        }
+                                    }
+                                }}
+                                />
                             </div>
                         }
                         <div className="trends py-5">
@@ -386,7 +474,7 @@ function Stock() {
                             </div>
                             <div className="earningsBox py-5">
                                 {
-                                    earnings.length > 0 ?
+                                   earnings && earnings.length > 0 ?
                                     showEarnings
                                     :
                                     <h1>NO EARNING DATA</h1>
