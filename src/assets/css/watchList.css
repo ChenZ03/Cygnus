@@ -1,0 +1,19 @@
+html {
+    padding: 0;
+    margin : 0;
+    box-sizing: border-box;
+}
+
+.watch-list-item{
+    padding: 30px;
+    border-radius: 20px;
+    border: 2px solid #323549;
+    margin-top: 50px;
+    transition: 400ms ease
+}
+
+.watch-list-item:hover{
+    transform: scale(1.05);
+    box-shadow: 3px 3px 3px 3px #323549;
+    cursor : pointer;
+}

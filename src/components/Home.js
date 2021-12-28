@@ -129,7 +129,18 @@ function Home() {
                                     <div className="watching">
                                         {
                                             fetching && userData.watchList.length > 0 ?
-                                            null
+                                            <div className="d-flex watchBox justify-content-center align-items-center">
+                                                {userData.watchList.map(watch => {
+                                                    return (
+                                                        <div className="watchElement" key={watch} onClick={e => {
+                                                            e.preventDefault()
+                                                            navigate("/stock" , {state : {company : watch}})
+                                                        }}>
+                                                            <h2>{watch}</h2>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
                                             :
                                             <div className="d-flex align-items-center justify-content-center">
                                                 <h1>NOTHING IN WATCHLIST</h1>

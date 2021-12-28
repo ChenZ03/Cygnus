@@ -92,7 +92,7 @@ html{
     transition: 400ms ease;
 }
 
-.featureList:hover{
+.featureList:hover, .watchElement:hover{
     transform: scale(1.05);
     box-shadow: 3px 3px 3px 3px #323549;
     cursor : pointer;
@@ -126,4 +126,20 @@ html{
 ::placeholder {
     color:white;
     opacity: 55%;
+}
+
+.watchBox{
+    flex-basis: 50%;
+    flex-wrap: wrap;
+}
+
+.watchElement {
+    width : 200px;
+    padding : 20px;
+    text-align: center;
+    border : 2px solid #323549;
+    border-radius: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    transition : 400ms ease;
 }

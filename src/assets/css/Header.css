@@ -25,6 +25,11 @@
     background-color: #323549;
 }
 
+.User:hover{
+    cursor: pointer;
+    transform : scale(1.05);
+}
+
 @media (max-width: 1237px) {
     .User{
         margin-right: 0;
@@ -46,7 +51,10 @@
         padding-top: 15px;
         padding-bottom: 15px;
         font-size : 30px ;
+        transition: 400ms ease
     }
+
+  
 
     .User h1{
         font-size : 30px;
