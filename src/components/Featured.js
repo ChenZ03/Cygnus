@@ -28,7 +28,7 @@ function Featured({company, editing, setE}) {
 
     const onClickHandler = e => {
         e.preventDefault()
-        navigate("/stock", {state : {company : company}})
+        navigate("/stock", {state : {company : company.code}})
     }
 
     const onChangeHandler = e => {

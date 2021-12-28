@@ -18,3 +18,32 @@ html{
     font-family : 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color : white ;
 }
+
+.addPost{
+    width : 60%;
+    padding : 50px;
+    border : 2px solid #323549;
+    margin-top : 50px;
+}
+
+.apTitle{
+    margin : 30px;
+}
+
+.singlePost{
+    padding : 50px;
+    border : 2px solid #323549;
+    margin-top : 30px;
+}
+
+.comments{
+    height:  100px;
+    overflow-y : auto; 
+    border-top : 4px solid #323549;
+}
+
+i:hover{
+    cursor: pointer;
+    transform : scale(1.05);
+    transition: 400ms ease;
+}

@@ -264,7 +264,7 @@ function Stock() {
                 return(
                     <div className="row" key={e.id}>
                         <div className="col-4">
-                            <img src={e.image} alt={e} className="img-fluid news-img"/>
+                            <img src={e.image} alt={e.image} className="img-fluid news-img"/>
                         </div>
                         <div className="col-8">
                             <h2 className="news-headline">{e.headline}</h2>
