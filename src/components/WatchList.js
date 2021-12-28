@@ -12,11 +12,14 @@ function Watchlist() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        let userId = JSON.parse(localStorage.getItem('userData'))
-        userId = userId.user.id
-        fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
-        .then(response => response.json())
-        .then(data => setWatchList(data))
+        if(localStorage.hasOwnProperty('token')){
+            let userId = JSON.parse(localStorage.getItem('userData'))
+            userId = userId.user.id
+            fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+            .then(response => response.json())
+            .then(data => setWatchList(data))
+        }
+       
     }, [])
 
     const onClickHandler = company => {
@@ -28,7 +31,7 @@ function Watchlist() {
     }
     return(
         <div>
-            {localStorage.hasOwnProperty('token') && 
+            {localStorage.hasOwnProperty('token') ?
                 <div className="Home">
                     {<Header />}
                     {<Nav />}
@@ -40,6 +43,10 @@ function Watchlist() {
                         : 
                         <h1 className="text-center">Watchlist is Empty</h1>
                     }
+                </div>
+                :
+                <div className="loginPlease d-flex align-items-center justify-content-center">
+                    <h2 className="text-center">Please Proceed to Login Page</h2>
                 </div>
             }
         </div>

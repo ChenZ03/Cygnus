@@ -62,7 +62,10 @@ function Login() {
             .then(data => {
                 console.log(data.msg)
                 if(data.msg === "Not Found"){
-                    Swal.fire("User not found, please proceed to register")
+                    Swal.fire({
+                        icon : "error",
+                        title : "User not found, please proceed to register"
+                    })
                 }else{
                     let code = Math.floor(100000 + Math.random() * 900000)
                     fetch(`http://${process.env.REACT_APP_API_URL}/auth/login`, {
@@ -75,6 +78,9 @@ function Login() {
                         console.log(data)
                         if(data.msg === "Logged in succesfully"){
                             Swal.fire({
+                                customClass: {
+                                    input : 'swalInput'
+                                },
                                 title : "Two Factor Authentication",
                                 text : "Enter the 6 digits code in your email address",
                                 input : "text",
@@ -83,7 +89,10 @@ function Login() {
                             .then(result => {
                                 console.log(result.value, code);
                                 if(parseInt(result.value) === code) {
-                                    Swal.fire("Login Successfully")
+                                    Swal.fire({
+                                        icon : "success",
+                                        title : "Login Successfully"
+                                    })
                                     let decoded = jwt_decode(data.token)
 
                                     localStorage.setItem('userData', JSON.stringify(decoded))
@@ -91,11 +100,17 @@ function Login() {
                                     navigate("/home")
 
                                 }else{
-                                    Swal.fire("Invalid Code")
+                                    Swal.fire({
+                                        icon : "error",
+                                        title : "Invalid Code"
+                                    })
                                 }
                             })
                         }else{
-                            Swal.fire("Fail to Login")
+                            Swal.fire({
+                                icon : "error",
+                                title : "Fail to Login"
+                            })
                         }
                     })
                 }

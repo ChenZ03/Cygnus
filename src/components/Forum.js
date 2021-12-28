@@ -12,13 +12,17 @@ function Forum(){
     
     useEffect(() => {
 
-        let userId = JSON.parse(localStorage.getItem('userData'))
+        if(localStorage.hasOwnProperty('token')){
+            let userId = JSON.parse(localStorage.getItem('userData'))
 
-        fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
-        .then(response => response.json())
-        .then(data => setUserData(data.user))
+            fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
+            .then(response => response.json())
+            .then(data => setUserData(data.user))
+    
+            getPost()
+        }
 
-        getPost()
+      
 
     }, [page])
 
@@ -81,9 +85,15 @@ function Forum(){
         .then(response => response.json())
         .then(data => {
             if(data.msg === "success"){
-                Swal.fire("Post Approved")
+                Swal.fire({
+                    icon : "success",
+                    title : "Post Approved"
+                })
             }else{
-                Swal.fire("Error")
+                Swal.fire({
+                    icon : "error",
+                    title : "Error"
+                })
             }
             getPost()
         })
@@ -93,7 +103,10 @@ function Forum(){
         fetch(`http://${process.env.REACT_APP_API_URL}/forum/post/${id}`, { method: 'DELETE' })
         .then(response => response.json())
         .then(data => {
-            Swal.fire("Delete successfully")
+            Swal.fire({
+                icon : "success",
+                title : "Delete Successfully"
+            })
             getPost()
         })
     }
@@ -111,7 +124,10 @@ function Forum(){
     const addComment = (id, e) => {
         let comment = e.target.previousElementSibling.value
         if(comment.length < 1){
-            Swal.fire("Please enter at least one character for your comment")
+            Swal.fire({
+                icon : "error",
+                title : "Please enter at least one character for your comment"
+            })
         }else{
             fetch(`http://${process.env.REACT_APP_API_URL}/forum/comments`, {
                 method: 'POST',
@@ -121,7 +137,10 @@ function Forum(){
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                Swal.fire("Comment added successfully")
+                Swal.fire({
+                    icon : "success",
+                    title : "Comment Added Successfully"
+                })
                 getPost()
             })
         }
@@ -205,7 +224,10 @@ function Forum(){
         let title = document.getElementById('title').value
         let desc = document.getElementById('desc').value
         if(title.length < 1 || desc.length < 1){
-            Swal.fire("Please check your inputs")
+            Swal.fire({
+                icon : "error",
+                title : "Please check your inputs"
+            })
         }else{
             fetch(`http://${process.env.REACT_APP_API_URL}/forum/post`, {
                 method: 'POST',
@@ -215,11 +237,17 @@ function Forum(){
             .then(response => response.json())
             .then(data => {
                 if(data.msg === 'Success'){
-                    Swal.fire("Post Added Successfully")
+                    Swal.fire({
+                        icon : "success",
+                        title : "Post added successfully"
+                    })
                     getPost()
                 }
                 else{
-                    Swal.fire("ERROR")
+                    Swal.fire({
+                        icon : "error",
+                        title : "Error"
+                    })
                 }
             })
         }
@@ -228,7 +256,7 @@ function Forum(){
     return (
         <>
         {
-            localStorage.getItem('userData') && 
+            localStorage.getItem('userData') ?
             <div className="forum"> 
                 {<Header />}
                 {<Nav />}
@@ -268,6 +296,10 @@ function Forum(){
                     }
                     </div>
                 </div>
+            </div>
+            :
+            <div className="loginPlease d-flex align-items-center justify-content-center">
+                <h2 className="text-center">Please Proceed to Login Page</h2>
             </div>
         }
         </>

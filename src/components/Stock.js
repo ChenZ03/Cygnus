@@ -11,7 +11,9 @@ import '../assets/css/Stock.css'
 
 function Stock() {
     const location = useLocation()
-    const company = location.state.company
+    if(localStorage.hasOwnProperty('token')) {
+        var company = location.state.company
+    }
     const [hasData, setHasData] = useState(true)
     const [loading, setLoading] = useState(true)
     const [interval, setInterval] = useState('Daily')
@@ -38,77 +40,80 @@ function Stock() {
 
 
     useEffect(() => {
-
-        fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
-        .then(response => response.json())
-        .then(async (data) => {
-            if(data && data.data.hasOwnProperty('name')){
-                setCompanyData(data.data)
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyNews/${company}`)
-                .then(response => response.json())
-                .then(data => setCompanyNews(data.data))
-
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/trends/${company}`)
-                .then(response => response.json())
-                .then(data => {
-                    let arr = []
-                    data.data.map(e => {
-                        let date = new Date(e.period).getYear()
-                        if(date === 121){
-                            arr.push(e)
-                        }
-                        return e
+        if(localStorage.hasOwnProperty('token')){
+            fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
+            .then(response => response.json())
+            .then(async (data) => {
+                if(data && data.data.hasOwnProperty('name')){
+                    setCompanyData(data.data)
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyNews/${company}`)
+                    .then(response => response.json())
+                    .then(data => setCompanyNews(data.data))
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/trends/${company}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        let arr = []
+                        data.data.map(e => {
+                            let date = new Date(e.period).getYear()
+                            if(date === 121){
+                                arr.push(e)
+                            }
+                            return e
+                        })
+                        setTrends(arr)
                     })
-                    setTrends(arr)
-                })
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/social/${company}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        setReddit(data.data.reddit)
+                        setTwitter(data.data.twitter)
+                       
+                    })
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/insider/${company}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        setInsiderTrans(data.data.data)
+                    })
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData2/${company}`)
+                    .then(response => response.json())
+                    .then(data => setCompanyData2(data.data))
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/quote/${company}`)
+                    .then(response => response.json())
+                    .then(data => setQuote(data.data))
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/earnings/${company}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        setEarnings(data.data.annualEarnings)
+                    })
+    
+                    let userId = JSON.parse(localStorage.getItem('userData'))
+                    userId = userId.user.id
+    
+                    await fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.includes(company)){
+                            console.log(true)
+                            setExist(true)
+                        }
+                    })
+    
+    
+                   setLoading(false)
+                }else{
+                    setHasData(false)
+                }
+            })
+    
+        }
 
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/social/${company}`)
-                .then(response => response.json())
-                .then(data => {
-                    setReddit(data.data.reddit)
-                    setTwitter(data.data.twitter)
-                   
-                })
-
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/insider/${company}`)
-                .then(response => response.json())
-                .then(data => {
-                    setInsiderTrans(data.data.data)
-                })
-
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData2/${company}`)
-                .then(response => response.json())
-                .then(data => setCompanyData2(data.data))
-
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/quote/${company}`)
-                .then(response => response.json())
-                .then(data => setQuote(data.data))
-
-                await fetch(`http://${process.env.REACT_APP_API_URL}/company/earnings/${company}`)
-                .then(response => response.json())
-                .then(data => {
-                    setEarnings(data.data.annualEarnings)
-                })
-
-                let userId = JSON.parse(localStorage.getItem('userData'))
-                userId = userId.user.id
-
-                await fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if(data.includes(company)){
-                        console.log(true)
-                        setExist(true)
-                    }
-                })
-
-
-               setLoading(false)
-            }else{
-                setHasData(false)
-            }
-        })
-
+      
 
     }, [company])
 
@@ -350,7 +355,10 @@ function Stock() {
         .then(response => response.json())
         .then(data => {
             if(data.length > 4){
-                Swal.fire("Exceed watchList limit")
+                Swal.fire({
+                    icon : "error",
+                    title : "WatchList limit exceeded"
+                })
             }else{
                 fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList`, {
                     method : 'POST',
@@ -360,10 +368,16 @@ function Stock() {
                 .then(response => response.json())
                 .then(data => {
                     if(data.msg === 'success'){
-                        Swal.fire("SuccessFully Added to watchList")
+                        Swal.fire({
+                            icon : "success",
+                            title : "Successfully added to watchList"
+                        })
                         setExist(true)
                     }else{
-                        Swal.fire("Error")
+                        Swal.fire({
+                            icon : "error",
+                            title : "Error"
+                        })
                     }
                 })
             }
@@ -382,10 +396,16 @@ function Stock() {
         .then(response => response.json())
         .then(data => {
             if(data.msg === 'Success'){
-                Swal.fire('Successfully remove from watchList')
+                Swal.fire({
+                    icon : "success",
+                    title : "Successfully remove from watchList"
+                })
                 setExist(false)
             }else{
-                Swal.fire('Error')
+                Swal.fire({
+                    icon : "error",
+                    title : "Error"
+                })
             }
         })
     }
@@ -394,7 +414,7 @@ function Stock() {
     return(
         <>
         {
-            localStorage.hasOwnProperty('userData') &&
+            localStorage.hasOwnProperty('userData') ?
             <div className="stock">
                 {<Header />}
                 {<Nav />}
@@ -594,7 +614,18 @@ function Stock() {
                     <h1 className="text-center py-5">NO DATA AVAILABLE FOR THIS STOCK</h1>
  
                 }
+
+                {
+                    loading &&
+                    <div className="text-center py-5">
+                        <h1>Loading Data</h1>
+                    </div>
+                }
             </div>  
+            :
+            <div className="loginPlease d-flex align-items-center justify-content-center">
+                <h2 className="text-center">Please Proceed to Login Page</h2>
+            </div>
         }
         </>
     )

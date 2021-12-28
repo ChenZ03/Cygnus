@@ -13,15 +13,17 @@ function News() {
     let pages = [1,2,3,4,5,6,7,8,9]
 
     useEffect(() => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/${category}`)
-        .then(response => response.json())
-        .then(data => {
-            setNews(data.data)
-            console.log(data)
-            setFetching(true)
-            
-        })
+        if(localStorage.hasOwnProperty('token')){
+            fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/${category}`)
+            .then(response => response.json())
+            .then(data => {
+                setNews(data.data)
+                console.log(data)
+                setFetching(true)
+                
+            })
 
+        } 
        
     }, [category])
 
@@ -49,7 +51,7 @@ function News() {
     return(
         <div>
             {
-                localStorage.hasOwnProperty('userData') &&
+                localStorage.hasOwnProperty('userData') ?
                 <div className="News">
                     {<Header />}
                     {<Nav />}
@@ -110,6 +112,10 @@ function News() {
                             }}>MERGER</p>
                         </div>
                     </div>
+                </div>
+                : 
+                <div className="loginPlease d-flex align-items-center justify-content-center">
+                    <h2 className="text-center">Please Proceed to Login Page</h2>
                 </div>
             }
         </div>

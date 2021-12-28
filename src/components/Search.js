@@ -44,7 +44,10 @@ function Search() {
         e.preventDefault()
         let newTerm = document.getElementById('search').value
         if(newTerm.length < 1) {
-            Swal.fire("Please enter at least one character")
+            Swal.fire({
+                icon : "error",
+                title : "Please enter at least one character"
+            })
         }else{
             setLoading(true)
             setTerm(newTerm)

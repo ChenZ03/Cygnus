@@ -10,17 +10,22 @@ import './assets/css/App.css';
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/watchList" element={<Watchlist />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/forum" element={<Forum />} />
-        <Route path="/stock" element={<Stock />} />
-        <Route path="/search" element={<Search />} />
-      </Routes>
-    </div>
+    <>
+      <div className="App">
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/watchList" element={<Watchlist />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/forum" element={<Forum />} />
+          <Route path="/stock" element={<Stock />} />
+          <Route path="/search" element={<Search />} />
+        </Routes>
+      </div>
+      <div className="screen d-flex align-items-center justify-content-center">
+        <h1>Sorry, your device isnt supported</h1>
+      </div>
+    </>
   );
 }
 

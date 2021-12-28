@@ -14,30 +14,33 @@ function Home() {
     const [editFeatured, setEditFeatured] = useState(false)
 
     useEffect(() => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/general`)
-        .then(response => response.json())
-        .then(data =>{
-            setNews(data.data)
-            setFetching(true)
-        })
-
-        let userId = JSON.parse(localStorage.getItem('userData'))
-
-        fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
-        .then(response => response.json())
-        .then(data => setUserData(data.user))
-
-
-        fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`)
-        .then(response => response.json())
-        .then(data => {
-           let feature = []
-           for(let i of data.feature){
-               feature.push(i)
-           }
-           setFeatured(feature)
-          
-        })
+        if(localStorage.hasOwnProperty('userData')){
+            fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/general`)
+            .then(response => response.json())
+            .then(data =>{
+                setNews(data.data)
+                setFetching(true)
+            })
+    
+            let userId = JSON.parse(localStorage.getItem('userData'))
+    
+            fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
+            .then(response => response.json())
+            .then(data => setUserData(data.user))
+    
+    
+            fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`)
+            .then(response => response.json())
+            .then(data => {
+               let feature = []
+               for(let i of data.feature){
+                   feature.push(i)
+               }
+               setFeatured(feature)
+              
+            })
+        }
+        
        
     }, [])
 
@@ -70,7 +73,10 @@ function Home() {
         e.preventDefault();
         let searchTerm = document.getElementById('search').value
         if(searchTerm.length < 1) {
-            Swal.fire("Please enter at least one character")
+            Swal.fire({
+                icon : "error",
+                title : "Please enter at least one character"
+            })
         }else{
             navigate('/search',  {state : {term : searchTerm}})
         }
@@ -79,7 +85,7 @@ function Home() {
     let navigate = useNavigate()
     return(
         <div>
-            {localStorage.hasOwnProperty('token') && 
+            {localStorage.hasOwnProperty('token') ?
                 <div className="Home">
                     {<Header />}
                     {<Nav />}
@@ -175,6 +181,10 @@ function Home() {
                             </div>
                         </div>
                     </div>
+                </div>
+                :
+                <div className="loginPlease d-flex justify-content-center align-items-center">
+                    <h2 className="text-center">Please Proceed to Login Page</h2>
                 </div>
             }
         </div>

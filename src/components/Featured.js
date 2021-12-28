@@ -50,14 +50,23 @@ function Featured({company, editing, setE}) {
                 .then(response => response.json())
                 .then(data => {
                     if(data.msg === 'success') {
-                        Swal.fire('Updated')
+                        Swal.fire({
+                            icon : "success",
+                            title : "Update Successfully"
+                        })
                         setE()
                     }else{
-                        Swal.fire('Error')
+                        Swal.fire({
+                            icon : "error",
+                            title : "Error"
+                        })
                     }
                 })
             }else{
-                Swal.fire('Company dosent exist')
+                Swal.fire({
+                    icon : "error",
+                    title : "Company Dosent Exist"
+                })
             }
         })
         
