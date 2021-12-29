@@ -10,11 +10,11 @@ function Featured({company, editing, setE}) {
     const navigate = useNavigate()
 
     useEffect(() =>{
-        fetch(`http://${process.env.REACT_APP_API_URL}/company/lookup/${company.code}`)
+        fetch(`${process.env.REACT_APP_API_URL}/company/lookup/${company.code}`)
         .then(response => response.json())
         .then(data => {
             if(data.data.result.length > 0) {
-                fetch(`http://${process.env.REACT_APP_API_URL}/company/quote/${company.code}`)
+                fetch(`${process.env.REACT_APP_API_URL}/company/quote/${company.code}`)
                 .then(response2 => response2.json())
                 .then(data2 => {
                     setComName([data.data.result[0].description, data.data.result[0].displaySymbol])
@@ -38,11 +38,11 @@ function Featured({company, editing, setE}) {
 
     const confirmChange = e => {
         e.preventDefault()
-        fetch(`http://${process.env.REACT_APP_API_URL}/company/lookup/${company.code}`)
+        fetch(`${process.env.REACT_APP_API_URL}/company/lookup/${company.code}`)
         .then(response => response.json())
         .then(data => {
             if(data.data.result.length > 0) {
-                fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`, {
+                fetch(`${process.env.REACT_APP_API_URL}/data/featured`, {
                     method : 'PUT',
                     headers : {'Content-Type': 'application/json'},
                     body : JSON.stringify({name, id : company._id})

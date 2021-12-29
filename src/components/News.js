@@ -14,7 +14,7 @@ function News() {
 
     useEffect(() => {
         if(localStorage.hasOwnProperty('token')){
-            fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/${category}`)
+            fetch(`${process.env.REACT_APP_API_URL}/company/genNews/${category}`)
             .then(response => response.json())
             .then(data => {
                 setNews(data.data)

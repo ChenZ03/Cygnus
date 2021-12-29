@@ -15,7 +15,7 @@ function Watchlist() {
         if(localStorage.hasOwnProperty('token')){
             let userId = JSON.parse(localStorage.getItem('userData'))
             userId = userId.user.id
-            fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+            fetch(`${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
             .then(response => response.json())
             .then(data => setWatchList(data))
         }

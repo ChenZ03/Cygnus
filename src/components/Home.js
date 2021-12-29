@@ -15,7 +15,7 @@ function Home() {
 
     useEffect(() => {
         if(localStorage.hasOwnProperty('userData')){
-            fetch(`http://${process.env.REACT_APP_API_URL}/company/genNews/general`)
+            fetch(`${process.env.REACT_APP_API_URL}/company/genNews/general`)
             .then(response => response.json())
             .then(data =>{
                 setNews(data.data)
@@ -24,12 +24,12 @@ function Home() {
     
             let userId = JSON.parse(localStorage.getItem('userData'))
     
-            fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
+            fetch(`${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
             .then(response => response.json())
             .then(data => setUserData(data.user))
     
     
-            fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`)
+            fetch(`${process.env.REACT_APP_API_URL}/data/featured`)
             .then(response => response.json())
             .then(data => {
                let feature = []
@@ -47,7 +47,7 @@ function Home() {
     const refreshFeature = () => {
         setEditFeatured(false)
 
-        fetch(`http://${process.env.REACT_APP_API_URL}/data/featured`)
+        fetch(`${process.env.REACT_APP_API_URL}/data/featured`)
         .then(response => response.json())
         .then(data => {
            let feature = []

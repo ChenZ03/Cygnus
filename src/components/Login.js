@@ -19,7 +19,7 @@ function Login() {
         const handleGoogleSignIn = async res => {
             let decoded = jwt_decode(res.credential)  
             console.log(decoded)
-            fetch(`http://${process.env.REACT_APP_API_URL}/auth/user`, {
+            fetch(`${process.env.REACT_APP_API_URL}/auth/user`, {
                 method : 'POST',
                 headers : {'Content-Type': 'application/json'},
                 body : JSON.stringify({email : decoded.email})
@@ -33,7 +33,7 @@ function Login() {
                         text : "Please proceed to register"
                     })
                 }else{
-                    fetch(`http://${process.env.REACT_APP_API_URL}/auth/googleUser/${decoded.email}`)
+                    fetch(`${process.env.REACT_APP_API_URL}/auth/googleUser/${decoded.email}`)
                     .then(response => response.json())
                     .then(data => {
                         Swal.fire({
@@ -82,7 +82,7 @@ function Login() {
         if(!register){
             let email = document.getElementById('email').value
             let password = document.getElementById('password').value
-            fetch(`http://${process.env.REACT_APP_API_URL}/auth/user`, {
+            fetch(`${process.env.REACT_APP_API_URL}/auth/user`, {
                 method : 'POST',
                 headers : {'Content-Type': 'application/json'},
                 body : JSON.stringify({email})
@@ -97,7 +97,7 @@ function Login() {
                     })
                 }else{
                     let code = Math.floor(100000 + Math.random() * 900000)
-                    fetch(`http://${process.env.REACT_APP_API_URL}/auth/login`, {
+                    fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
                         method : 'POST',
                         headers : {'Content-Type': 'application/json'},
                         body : JSON.stringify({email, password, code})
@@ -156,7 +156,7 @@ function Login() {
             let email = document.getElementById('email').value
             let password = document.getElementById('password').value
             let password2 = document.getElementById('password2').value
-            fetch(`http://${process.env.REACT_APP_API_URL}/auth/user`, {
+            fetch(`${process.env.REACT_APP_API_URL}/auth/user`, {
                 method : 'POST',
                 headers : {'Content-Type': 'application/json'},
                 body : JSON.stringify({email})
@@ -169,7 +169,7 @@ function Login() {
                         return
                     }
 
-                    fetch(`http://${process.env.REACT_APP_API_URL}/auth/register`, {
+                    fetch(`${process.env.REACT_APP_API_URL}/auth/register`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({email, username, password})

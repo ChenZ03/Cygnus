@@ -15,7 +15,7 @@ function Search() {
     const [empty, setEmpty] = useState(false)
 
     useEffect(() => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/company/lookup/${term}`)
+        fetch(`${process.env.REACT_APP_API_URL}/company/lookup/${term}`)
         .then(response => response.json())
         .then(data => {
             if(data.data.count < 1){

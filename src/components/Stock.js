@@ -41,16 +41,16 @@ function Stock() {
 
     useEffect(() => {
         if(localStorage.hasOwnProperty('token')){
-            fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
+            fetch(`${process.env.REACT_APP_API_URL}/company/companyData/${company}`)
             .then(response => response.json())
             .then(async (data) => {
                 if(data && data.data.hasOwnProperty('name')){
                     setCompanyData(data.data)
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyNews/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/companyNews/${company}`)
                     .then(response => response.json())
                     .then(data => setCompanyNews(data.data))
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/trends/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/trends/${company}`)
                     .then(response => response.json())
                     .then(data => {
                         let arr = []
@@ -64,7 +64,7 @@ function Stock() {
                         setTrends(arr)
                     })
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/social/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/social/${company}`)
                     .then(response => response.json())
                     .then(data => {
                         setReddit(data.data.reddit)
@@ -72,21 +72,21 @@ function Stock() {
                        
                     })
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/insider/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/insider/${company}`)
                     .then(response => response.json())
                     .then(data => {
                         setInsiderTrans(data.data.data)
                     })
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/companyData2/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/companyData2/${company}`)
                     .then(response => response.json())
                     .then(data => setCompanyData2(data.data))
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/quote/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/quote/${company}`)
                     .then(response => response.json())
                     .then(data => setQuote(data.data))
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/company/earnings/${company}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/company/earnings/${company}`)
                     .then(response => response.json())
                     .then(data => {
                         setEarnings(data.data.annualEarnings)
@@ -95,7 +95,7 @@ function Stock() {
                     let userId = JSON.parse(localStorage.getItem('userData'))
                     userId = userId.user.id
     
-                    await fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+                    await fetch(`${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
                     .then(response => response.json())
                     .then(data => {
                         if(data.includes(company)){
@@ -217,7 +217,7 @@ function Stock() {
     }, [trends])
 
     useEffect(() => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/chart/${interval}/${company}`)
+        fetch(`${process.env.REACT_APP_API_URL}/chart/${interval}/${company}`)
         .then(response => response.json())
         .then(data => {
            let keys = Object.keys(data.data)
@@ -351,7 +351,7 @@ function Stock() {
         let userId = JSON.parse(localStorage.getItem('userData'))
         userId = userId.user.id
         e.preventDefault()
-        fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
+        fetch(`${process.env.REACT_APP_API_URL}/data/watchList/${userId}`)
         .then(response => response.json())
         .then(data => {
             if(data.length > 4){
@@ -360,7 +360,7 @@ function Stock() {
                     title : "WatchList limit exceeded"
                 })
             }else{
-                fetch(`http://${process.env.REACT_APP_API_URL}/data/watchList`, {
+                fetch(`${process.env.REACT_APP_API_URL}/data/watchList`, {
                     method : 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body : JSON.stringify({id : userId, stock : company})
@@ -388,7 +388,7 @@ function Stock() {
         let userId = JSON.parse(localStorage.getItem('userData'))
         userId = userId.user.id
         e.preventDefault()
-        fetch(`http://${process.env.REACT_APP_API_URL}/data/delWatchList`, {
+        fetch(`${process.env.REACT_APP_API_URL}/data/delWatchList`, {
             method : "POST",
             headers : {'Content-Type': 'application/json'},
             body : JSON.stringify({id : userId, stock : company})

@@ -15,7 +15,7 @@ function Forum(){
         if(localStorage.hasOwnProperty('token')){
             let userId = JSON.parse(localStorage.getItem('userData'))
 
-            fetch(`http://${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
+            fetch(`${process.env.REACT_APP_API_URL}/auth/getUserData/${userId.user.id}`)
             .then(response => response.json())
             .then(data => setUserData(data.user))
     
@@ -30,10 +30,10 @@ function Forum(){
     const getPost = () =>{
         setForum(null)
         if(page === 'forum'){
-            fetch(`http://${process.env.REACT_APP_API_URL}/forum/post`)
+            fetch(`${process.env.REACT_APP_API_URL}/forum/post`)
             .then(response => response.json())
             .then(data => {
-                fetch(`http://${process.env.REACT_APP_API_URL}/forum/comments`)
+                fetch(`${process.env.REACT_APP_API_URL}/forum/comments`)
                 .then(response2 => response2.json())
                 .then(data2 => {
                    let arr = []
@@ -51,7 +51,7 @@ function Forum(){
               
             })
         }else{
-            fetch(`http://${process.env.REACT_APP_API_URL}/forum/approve`)
+            fetch(`${process.env.REACT_APP_API_URL}/forum/approve`)
             .then(response => response.json())
             .then(data => {
                 let arr = []
@@ -77,7 +77,7 @@ function Forum(){
     })
 
     const onApprove = id => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/forum/approve`, {
+        fetch(`${process.env.REACT_APP_API_URL}/forum/approve`, {
             method: 'PUT',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({id})
@@ -100,7 +100,7 @@ function Forum(){
     }
 
     const onDelete = id => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/forum/post/${id}`, { method: 'DELETE' })
+        fetch(`${process.env.REACT_APP_API_URL}/forum/post/${id}`, { method: 'DELETE' })
         .then(response => response.json())
         .then(data => {
             Swal.fire({
@@ -112,7 +112,7 @@ function Forum(){
     }
 
     const upvote = (id, vote) => {
-        fetch(`http://${process.env.REACT_APP_API_URL}/forum/post`, {
+        fetch(`${process.env.REACT_APP_API_URL}/forum/post`, {
             method : "PUT",
             headers : {'Content-Type': 'application/json'},
             body : JSON.stringify({id, vote})
@@ -129,7 +129,7 @@ function Forum(){
                 title : "Please enter at least one character for your comment"
             })
         }else{
-            fetch(`http://${process.env.REACT_APP_API_URL}/forum/comments`, {
+            fetch(`${process.env.REACT_APP_API_URL}/forum/comments`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body : JSON.stringify({postId : id, comment, author : userData.username})
@@ -229,7 +229,7 @@ function Forum(){
                 title : "Please check your inputs"
             })
         }else{
-            fetch(`http://${process.env.REACT_APP_API_URL}/forum/post`, {
+            fetch(`${process.env.REACT_APP_API_URL}/forum/post`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({title, desc, author : userData.username})
