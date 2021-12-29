@@ -9,6 +9,8 @@ import Search from './components/Search'
 import './assets/css/App.css';
 
 function App() {
+  console.log = function () {};
+  console.disableYellowBox = true;
   return (
     <>
       <div className="App">
