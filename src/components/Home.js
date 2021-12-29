@@ -10,7 +10,7 @@ function Home() {
     const [featured, setFeatured] = useState([])
     const [news, setNews] = useState()
     const [fetching, setFetching] = useState(false)
-    const [userData, setUserData] = useState({})
+    const [userData, setUserData] = useState(null)
     const [editFeatured, setEditFeatured] = useState(false)
 
     useEffect(() => {
@@ -96,7 +96,7 @@ function Home() {
                                     <div className="d-flex align-items-center justify-content-between">
                                         <h1 className="title">Featured</h1>
                                         {
-                                                  userData.isAdmin &&
+                                                 ( userData && userData.isAdmin) &&
                                                   <button onClick={e => {
                                                         e.preventDefault();
                                                         setEditFeatured(!editFeatured)
@@ -134,7 +134,7 @@ function Home() {
                                     </div>
                                     <div className="watching">
                                         {
-                                            fetching && userData.watchList.length > 0 ?
+                                            fetching && userData && userData.watchList.length > 0 ?
                                             <div className="d-flex watchBox justify-content-center align-items-center">
                                                 {userData.watchList.map(watch => {
                                                     return (
