@@ -24,7 +24,7 @@ html {
 
 .screen{
   display: none !important;
-  color: black;
+  color: white;
   width : 100vw;
   height:  100vh;
   background-color: #323549;
@@ -36,6 +36,8 @@ html {
   }
 
   .screen{
-    display : block
+    display : block !important;
+    width : 100vw;
+    height : 100vh;
   }
 }
