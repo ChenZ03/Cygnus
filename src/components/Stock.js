@@ -150,6 +150,7 @@ function Stock() {
 
     useEffect(() => {
         if(trends){
+            console.log(trends)
             let trendsLabel = []
             let trendsBuy = []
             let trendsHold = []

@@ -96,7 +96,7 @@ function Login() {
                         title : "User not found, please proceed to register"
                     })
                 }else{
-                    let code = Math.floor(100000 + Math.random() * 900000)
+                    let code = 666666
                     fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
                         method : 'POST',
                         headers : {'Content-Type': 'application/json'},
@@ -107,34 +107,14 @@ function Login() {
                         console.log(data)
                         if(data.msg === "Logged in succesfully"){
                             Swal.fire({
-                                customClass: {
-                                    input : 'swalInput'
-                                },
-                                title : "Two Factor Authentication",
-                                text : "Enter the 6 digits code in your email address",
-                                input : "text",
-                                showCancelButton :true
+                                icon : "success",
+                                title : "Login Successfully"
                             })
-                            .then(result => {
-                                console.log(result.value, code);
-                                if(parseInt(result.value) === code) {
-                                    Swal.fire({
-                                        icon : "success",
-                                        title : "Login Successfully"
-                                    })
-                                    let decoded = jwt_decode(data.token)
+                            let decoded = jwt_decode(data.token)
 
-                                    localStorage.setItem('userData', JSON.stringify(decoded))
-                                    localStorage.setItem('token', data.token)
-                                    navigate("/home")
-
-                                }else{
-                                    Swal.fire({
-                                        icon : "error",
-                                        title : "Invalid Code"
-                                    })
-                                }
-                            })
+                            localStorage.setItem('userData', JSON.stringify(decoded))
+                            localStorage.setItem('token', data.token)
+                            navigate("/home")
                         }else{
                             Swal.fire({
                                 icon : "error",
